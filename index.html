@@ -241,6 +241,7 @@
     let jarvisPendingSpeechPurpose = 'intro';
     let jarvisTurnstile = null;
     let jarvisReconnectRequested = false;
+    let jarvisPendingAutoSpeak = false;
 
     function setJarvisStatus(text) {
       jarvisStatus.textContent = text;
@@ -345,6 +346,12 @@
             addJarvisMessage('assistant', answer);
             setJarvisStatus('JARVIS ready');
           }
+          // If a visitor clicked “Hear JARVIS voice” before the model replied,
+          // honour that request as soon as the matching text is available.
+          if (jarvisPendingAutoSpeak && message.purpose === jarvisPendingSpeechPurpose) {
+            jarvisPendingAutoSpeak = false;
+            if (sendJarvis({type:'speak'})) setJarvisStatus('Generating JARVIS voice audio…');
+          }
           return;
         }
         if (message.type === 'audio') {
@@ -356,12 +363,23 @@
             const url = URL.createObjectURL(blob);
             const audio = document.createElement('audio');
             audio.controls = true;
-            audio.preload = 'none';
+            audio.autoplay = true;
+            audio.playsInline = true;
+            audio.preload = 'auto';
             audio.src = url;
-            const target = jarvisPendingSpeechPurpose === 'intro' ? jarvisIntroAudioWrap : jarvisChatAudioWrap;
+            const target = jarvisChatPanel.hidden ? jarvisIntroAudioWrap : jarvisChatAudioWrap;
             target.replaceChildren(audio);
             target.hidden = false;
-            setJarvisStatus('JARVIS voice response ready — press play');
+            // Try playback after a deliberate voice-button click. Some browsers
+            // block playback after asynchronous network work; the visible controls
+            // remain available in that case so the visitor can press Play.
+            const playback = audio.play();
+            if (playback && typeof playback.then === 'function') {
+              playback.then(() => setJarvisStatus('JARVIS speaking…'))
+                .catch(() => setJarvisStatus('Voice is ready — press Play in the audio control if playback was blocked.'));
+            } else {
+              setJarvisStatus('Voice audio ready — use the audio controls if needed.');
+            }
           } catch (_) { setJarvisStatus('Could not prepare the audio response'); }
           return;
         }
@@ -393,8 +411,25 @@
       return true;
     }
     function askForVoice(purpose) {
-      if (!jarvisLatestReply) { setJarvisStatus('Waiting for JARVIS response'); return; }
       jarvisPendingSpeechPurpose = purpose;
+      if (!jarvisConnected || !jarvisSocket || jarvisSocket.readyState !== WebSocket.OPEN) {
+        // The first voice-button click must start the secure chat path instead of
+        // silently returning before an introduction exists.
+        jarvisPendingSpeechPurpose = 'intro';
+        jarvisPendingAutoSpeak = true;
+        closeJarvis();
+        openJarvisChat();
+        setJarvisStatus('Complete security verification — JARVIS will speak when connected.');
+        jarvisCountdown.textContent = 'Complete security verification to hear JARVIS introduce Gurpreet.';
+        return;
+      }
+      if (!jarvisLatestReply) {
+        jarvisPendingSpeechPurpose = 'intro';
+        jarvisPendingAutoSpeak = true;
+        setJarvisStatus('Waiting for JARVIS introduction — voice request queued.');
+        return;
+      }
+      jarvisPendingAutoSpeak = false;
       if (!sendJarvis({type:'speak'})) return;
       setJarvisStatus('Generating JARVIS voice audio…');
     }
