@@ -12,9 +12,97 @@
     @media(max-width:850px){.hero-grid{grid-template-columns:1fr;gap:38px}.visual{min-height:330px;max-width:600px;width:100%;margin:auto}.about-grid,.timeline{grid-template-columns:1fr}.section-head{display:block}.section-head p{margin-top:14px}.contact-box{display:block}.contact-actions{flex-direction:row;flex-wrap:wrap;margin-top:23px}.contact-actions .button{flex:1}.navlinks{gap:14px}}
     @media(max-width:600px){.wrap{width:min(var(--max),calc(100% - 30px))}.nav-inner{height:64px}.menu-toggle{display:block}.nav-cta{display:none}.navlinks{display:none;position:absolute;top:64px;left:0;right:0;padding:18px 22px;background:rgba(6,16,29,.98);border-bottom:1px solid var(--line);flex-direction:column;align-items:flex-start}.navlinks.open{display:flex}.hero{padding:65px 0 55px}h1{font-size:45px}.intro{font-size:16px}.visual{min-height:300px}.orb{width:200px;height:200px}.float-card.one{left:13px;top:16px}.float-card.two{right:10px;top:115px}.float-card.three{left:13px;bottom:14px}.section{padding:58px 0}.panel{padding:21px}.metric-grid{grid-template-columns:1fr 1fr 1fr}.metric{padding:12px 9px}.metric strong{font-size:20px}.cards,.edu-grid{grid-template-columns:1fr}.project{min-height:0;padding:22px}.contact-box{padding:25px}.footer-inner{display:block}.footer-links{margin-top:12px}.section-head{margin-bottom:23px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+    /* J.A.R.V.I.S. welcome sequence */
+    .jarvis-overlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 18% 18%,rgba(25,137,199,.18),transparent 40%),radial-gradient(ellipse at 86% 72%,rgba(24,204,217,.11),transparent 34%),rgba(2,8,16,.97);backdrop-filter:blur(18px);opacity:1;visibility:visible;transition:opacity .65s ease,visibility .65s ease;overflow:auto}
+    .jarvis-overlay:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(73,200,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(73,200,255,.025) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(180deg,#000,transparent 95%)}
+    .jarvis-overlay.is-dismissed{opacity:0;visibility:hidden;pointer-events:none}
+    .jarvis-frame{position:relative;width:min(1060px,100%);border:1px solid rgba(73,200,255,.32);border-radius:26px;background:linear-gradient(145deg,rgba(8,22,38,.98),rgba(3,12,23,.98));box-shadow:0 30px 120px rgba(0,0,0,.55),0 0 70px rgba(24,160,220,.11);overflow:hidden;animation:jarvis-rise .7s cubic-bezier(.2,.75,.25,1) both}
+    .jarvis-frame:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#49c8ff,#79e7f6,transparent);background-size:200% 100%;animation:jarvis-scan 4s linear infinite}
+    .jarvis-topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 24px;border-bottom:1px solid var(--line);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted)}
+    .jarvis-wordmark{display:flex;align-items:center;gap:10px;color:#eafaff;font-weight:850;letter-spacing:.2em}.jarvis-wordmark .brand-mark{width:29px;height:29px;border-radius:50%;font-size:10px}.jarvis-live{display:inline-flex;align-items:center;gap:8px;color:var(--green);letter-spacing:.12em}.jarvis-live:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+    .jarvis-body{display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:34px;padding:clamp(26px,5vw,54px)}
+    .jarvis-visual{position:relative;min-height:310px;display:grid;place-items:center;isolation:isolate}
+    .jarvis-halo{position:absolute;width:270px;height:270px;border-radius:50%;border:1px solid rgba(73,200,255,.38);box-shadow:0 0 0 18px rgba(73,200,255,.035),0 0 0 42px rgba(73,200,255,.025),inset 0 0 45px rgba(73,200,255,.13),0 0 80px rgba(42,173,236,.17);animation:jarvis-breathe 4s ease-in-out infinite}
+    .jarvis-halo:before,.jarvis-halo:after{content:"";position:absolute;inset:23px;border-radius:50%;border:1px dashed rgba(121,231,246,.62);transform:rotateX(66deg) rotateZ(25deg);animation:jarvis-rotate 18s linear infinite}.jarvis-halo:after{inset:45px;border-style:solid;border-color:rgba(73,200,255,.42);transform:rotateX(70deg) rotateZ(-40deg);animation-direction:reverse;animation-duration:13s}
+    .jarvis-core{position:relative;z-index:1;width:124px;height:124px;border-radius:50%;display:grid;place-items:center;text-align:center;color:#e9fdff;font-size:13px;font-weight:900;letter-spacing:.22em;background:radial-gradient(circle,rgba(75,209,255,.19),rgba(3,17,31,.85) 65%);border:1px solid rgba(121,231,246,.65);box-shadow:inset 0 0 25px rgba(73,200,255,.16),0 0 35px rgba(73,200,255,.24);text-shadow:0 0 14px rgba(73,200,255,.8)}
+    .jarvis-orbit-label{position:absolute;z-index:2;font-size:9px;letter-spacing:.16em;color:#a7dff4;text-transform:uppercase}.jarvis-orbit-label.label-a{top:14px;left:2px}.jarvis-orbit-label.label-b{right:0;top:92px}.jarvis-orbit-label.label-c{bottom:16px;left:15px}
+    .jarvis-copy .eyebrow{font-size:10px}.jarvis-copy h1{font-size:clamp(35px,5vw,56px);margin:17px 0 14px;max-width:none}.jarvis-copy .jarvis-lead{font-size:15px;line-height:1.8;color:#d9e9f9;margin:0}.jarvis-copy .jarvis-detail{font-size:13px;line-height:1.8;color:var(--muted);margin:13px 0 0}.jarvis-signoff{margin-top:18px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan)}
+    .jarvis-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.jarvis-actions .button{cursor:pointer;font:inherit;font-size:12px}.jarvis-actions .button:focus-visible,.jarvis-close:focus-visible,.jarvis-reopen:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+    .jarvis-progress{height:2px;background:rgba(157,177,200,.08)}.jarvis-progress span{display:block;width:100%;height:100%;background:linear-gradient(90deg,#49c8ff,#79e7f6);transform-origin:left;animation:jarvis-countdown 14s linear forwards}
+    .jarvis-bottom{display:flex;justify-content:space-between;gap:16px;padding:12px 24px;border-top:1px solid var(--line);font-size:10px;color:#8198b1;letter-spacing:.08em}.jarvis-bottom strong{color:#b6cee1;font-weight:600}
+    .jarvis-reopen{position:fixed;right:20px;bottom:20px;z-index:50;display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(73,200,255,.45);border-radius:999px;padding:10px 14px;background:rgba(5,17,30,.92);color:#eafaff;box-shadow:0 8px 30px rgba(0,0,0,.28);font:inherit;font-weight:700;font-size:11px;line-height:1.2;letter-spacing:.06em;cursor:pointer;backdrop-filter:blur(14px)}.jarvis-reopen .jarvis-mini-orb{width:9px;height:9px;background:var(--cyan);border-radius:50%;box-shadow:0 0 12px var(--cyan)}
+    @keyframes jarvis-rise{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes jarvis-scan{from{background-position:100% 0}to{background-position:-100% 0}}@keyframes jarvis-rotate{from{transform:rotateX(66deg) rotateZ(0deg)}to{transform:rotateX(66deg) rotateZ(360deg)}}@keyframes jarvis-breathe{0%,100%{filter:brightness(.85);transform:scale(.98)}50%{filter:brightness(1.2);transform:scale(1.02)}}@keyframes jarvis-countdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+    @media(max-width:760px){.jarvis-overlay{padding:12px}.jarvis-frame{border-radius:20px}.jarvis-topbar{padding:13px 16px;font-size:8px}.jarvis-body{grid-template-columns:1fr;gap:12px;padding:24px 22px 28px}.jarvis-visual{min-height:195px;order:0}.jarvis-halo{width:165px;height:165px}.jarvis-halo:before{inset:15px}.jarvis-halo:after{inset:30px}.jarvis-core{width:86px;height:86px;font-size:10px}.jarvis-orbit-label.label-a{top:6px;left:calc(50% - 125px)}.jarvis-orbit-label.label-b{right:calc(50% - 130px);top:62px}.jarvis-orbit-label.label-c{bottom:5px;left:calc(50% - 113px)}.jarvis-copy h1{font-size:38px;margin:10px 0}.jarvis-copy .jarvis-lead{font-size:14px}.jarvis-copy .jarvis-detail{font-size:12px;margin-top:8px}.jarvis-actions{margin-top:17px}.jarvis-actions .button{flex:1}.jarvis-bottom{padding:10px 16px;font-size:8px}.jarvis-reopen{right:12px;bottom:12px;padding:10px 12px}}
+    @media(prefers-reduced-motion:reduce){.jarvis-frame,.jarvis-halo,.jarvis-halo:before,.jarvis-halo:after,.jarvis-progress span{animation:none!important}.jarvis-overlay{transition:none}}
+
+  
+    .jarvis-chat-panel{position:fixed;right:22px;bottom:76px;z-index:70;width:min(430px,calc(100vw - 24px));max-height:min(620px,calc(100dvh - 105px));display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(73,200,255,.42);border-radius:20px;background:rgba(5,16,29,.97);box-shadow:0 24px 90px rgba(0,0,0,.55),0 0 36px rgba(73,200,255,.08);backdrop-filter:blur(18px)}
+    .jarvis-chat-panel[hidden],.jarvis-audio-wrap[hidden],.jarvis-chat-audio[hidden]{display:none!important}
+    .jarvis-chat-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(73,200,255,.045)}
+    .jarvis-chat-header strong{display:block;font-size:12px;letter-spacing:.16em;color:var(--cyan)}.jarvis-chat-header small{display:block;margin-top:3px;color:var(--muted);font-size:10px}
+    .jarvis-chat-close{width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--text);font-size:20px;cursor:pointer}
+    .jarvis-chat-messages{padding:15px;overflow:auto;min-height:150px;max-height:330px;display:flex;flex-direction:column;gap:10px}
+    .jarvis-chat-msg{max-width:92%;padding:10px 12px;border:1px solid var(--line);border-radius:13px;font-size:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+    .jarvis-chat-msg.assistant{align-self:flex-start;background:rgba(73,200,255,.065);color:#e7f6ff}.jarvis-chat-msg.visitor{align-self:flex-end;background:rgba(140,228,189,.065);border-color:rgba(140,228,189,.2);color:#e9fff4}.jarvis-chat-msg.system{align-self:center;background:transparent;color:var(--muted);border-style:dashed;font-size:10px;text-align:center}
+    .jarvis-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.jarvis-chat-form input{min-width:0;flex:1;border:1px solid rgba(157,177,200,.25);border-radius:12px;background:#061321;color:var(--text);padding:11px 12px;font:inherit;font-size:12px;outline:none}.jarvis-chat-form input:focus{border-color:var(--blue)}
+    .jarvis-chat-form button{border:1px solid transparent;border-radius:12px;padding:0 15px;background:linear-gradient(100deg,#37b8ee,#6de2e7);color:#061320;font:inherit;font-size:12px;font-weight:800;cursor:pointer}.jarvis-chat-form button:disabled,.jarvis-chat-form input:disabled{opacity:.45;cursor:not-allowed}
+    .jarvis-chat-note{padding:0 14px 13px;color:#7f96ad;font-size:9px;line-height:1.5}.jarvis-chat-audio{padding:0 14px 12px}.jarvis-chat-audio audio,.jarvis-audio-wrap audio{width:100%;height:38px}.jarvis-audio-wrap{margin-top:12px;max-width:440px}.jarvis-turnstile{position:relative;z-index:5;width:min(100%,300px);min-height:0;margin:14px 0 2px;overflow:visible;opacity:1;pointer-events:auto}
+    @media(max-width:760px){.jarvis-chat-panel{right:12px;bottom:70px;width:calc(100vw - 24px);max-height:calc(100dvh - 90px)}.jarvis-chat-messages{max-height:38vh}.jarvis-chat-form input{font-size:16px}.jarvis-reopen{max-width:calc(100vw - 24px)}}
+
   </style>
 </head>
 <body>
+  <section class="jarvis-overlay is-visible" id="jarvisOverlay" role="dialog" aria-modal="true" aria-labelledby="jarvisTitle" aria-describedby="jarvisIntro" aria-hidden="false">
+    <div class="jarvis-frame">
+      <div class="jarvis-topbar">
+        <div class="jarvis-wordmark"><span class="brand-mark">J</span><span>J.A.R.V.I.S.</span></div>
+        <span class="jarvis-live" id="jarvisStatus">Welcome sequence active</span>
+      </div>
+      <div class="jarvis-body">
+        <div class="jarvis-visual" aria-hidden="true">
+          <span class="jarvis-orbit-label label-a">Portfolio interface</span>
+          <span class="jarvis-orbit-label label-b">Systems online</span>
+          <span class="jarvis-orbit-label label-c">Personal guide · v1.0</span>
+          <div class="jarvis-halo"></div>
+          <div class="jarvis-core">J.A.R.<br>V.I.S.</div>
+        </div>
+        <div class="jarvis-copy">
+          <div class="eyebrow">Personal portfolio interface</div>
+          <h1 id="jarvisTitle">Good day.<br><span class="accent">Welcome.</span></h1>
+          <p class="jarvis-lead" id="jarvisIntro">I'm J.A.R.V.I.S., your guide to Gurpreet Singh's portfolio.</p>
+          <p class="jarvis-detail">Establishing a secure link to Gurpreet's J.A.R.V.I.S. assistant. Once connected, JARVIS will introduce Gurpreet and answer questions about his public professional profile and projects.</p>
+          <p class="jarvis-signoff">Live portfolio assistant · security verification required.</p>
+          <div id="jarvisIntroAudioWrap" class="jarvis-audio-wrap" hidden></div>
+          <div id="jarvisTurnstile" class="jarvis-turnstile" aria-label="Security verification"></div>
+          <div class="jarvis-actions">
+            <button class="button primary" id="jarvisEnter" type="button">Explore portfolio <span aria-hidden="true">↗</span></button>
+            <button class="button ghost" id="jarvisVoice" type="button">Hear JARVIS voice</button>
+            <button class="button ghost" id="jarvisChatStart" type="button">Ask JARVIS</button>
+          </div>
+        </div>
+      </div>
+      <div class="jarvis-progress" aria-hidden="true"><span id="jarvisProgress"></span></div>
+      <div class="jarvis-bottom"><span><strong>JARVIS GUIDE</strong> · Gurpreet Singh</span><span id="jarvisCountdown">Portfolio opening automatically</span></div>
+    </div>
+  </section>
+  <button class="jarvis-reopen" id="jarvisReopen" type="button" aria-label="Open live JARVIS assistant chat" hidden><span class="jarvis-mini-orb" aria-hidden="true"></span>J.A.R.V.I.S. LIVE CHAT <span aria-hidden="true">↗</span></button>
+
+  <section class="jarvis-chat-panel" id="jarvisChatPanel" aria-label="Live JARVIS portfolio assistant" hidden>
+    <header class="jarvis-chat-header">
+      <div><strong>J.A.R.V.I.S.</strong><small id="jarvisChatStatus">Waiting for secure verification</small></div>
+      <button type="button" class="jarvis-chat-close" id="jarvisChatClose" aria-label="Close chat">×</button>
+    </header>
+    <div class="jarvis-chat-messages" id="jarvisChatMessages" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <div class="jarvis-chat-audio" id="jarvisChatAudioWrap" hidden></div>
+    <div style="padding:0 12px 8px"><button type="button" class="button ghost" id="jarvisChatSpeak" style="padding:7px 11px;font-size:10px">Hear JARVIS voice</button></div>
+    <form class="jarvis-chat-form" id="jarvisChatForm">
+      <input id="jarvisChatInput" type="text" maxlength="1000" placeholder="Ask about Gurpreet's experience or projects…" autocomplete="off" aria-label="Ask JARVIS" disabled>
+      <button id="jarvisChatSend" type="submit" disabled>Send</button>
+    </form>
+    <div class="jarvis-chat-note">Public portfolio mode · No access to Gurpreet's desktop, files or accounts.</div>
+  </section>
+
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="#home" aria-label="Gurpreet Singh home"><span class="brand-mark">GS</span><span>Gurpreet Singh<span style="color:var(--blue)">.</span></span></a>
@@ -108,6 +196,9 @@
   </main>
   <footer class="footer"><div class="wrap"><div class="footer-inner"><span>© <span id="year"></span> Gurpreet Singh. Built with HTML, CSS & JavaScript.</span><div class="footer-links"><a href="#home">Back to top ↑</a><a href="https://github.com/singhgurpreet7g-wq" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/gurpreet-singh-25b19a216/" target="_blank" rel="noopener noreferrer">LinkedIn</a></div></div><p class="disclaimer">This portfolio describes personal experience and development interests. It is not affiliated with or endorsed by any employer or payment network. No confidential employer information, customer data or internal procedures are presented.</p></div></footer>
   <script>
+    const JARVIS_WS_URL = "wss://tomato-print-ethnic-walter.trycloudflare.com/";
+    const JARVIS_TURNSTILE_SITE_KEY = "0x4AAAAAAFSh8KbIcEWS16aj";
+
     const toggle = document.getElementById('menuToggle');
     const links = document.getElementById('navLinks');
     toggle.addEventListener('click', () => {
@@ -118,6 +209,229 @@
       links.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false');
     }));
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    const jarvisOverlay = document.getElementById('jarvisOverlay');
+    const jarvisEnter = document.getElementById('jarvisEnter');
+    const jarvisVoice = document.getElementById('jarvisVoice');
+    const jarvisChatStart = document.getElementById('jarvisChatStart');
+    const jarvisReopen = document.getElementById('jarvisReopen');
+    const jarvisStatus = document.getElementById('jarvisStatus');
+    const jarvisCountdown = document.getElementById('jarvisCountdown');
+    const jarvisProgress = document.getElementById('jarvisProgress');
+    const jarvisIntro = document.getElementById('jarvisIntro');
+    const jarvisChatPanel = document.getElementById('jarvisChatPanel');
+    const jarvisChatStatus = document.getElementById('jarvisChatStatus');
+    const jarvisChatMessages = document.getElementById('jarvisChatMessages');
+    const jarvisChatForm = document.getElementById('jarvisChatForm');
+    const jarvisChatInput = document.getElementById('jarvisChatInput');
+    const jarvisChatSend = document.getElementById('jarvisChatSend');
+    const jarvisChatClose = document.getElementById('jarvisChatClose');
+    const jarvisIntroAudioWrap = document.getElementById('jarvisIntroAudioWrap');
+    const jarvisChatAudioWrap = document.getElementById('jarvisChatAudioWrap');
+
+    let jarvisSocket = null;
+    let jarvisTurnstileWidgetId = null;
+    let jarvisTurnstileToken = null;
+    let jarvisConnected = false;
+    let jarvisIntroReceived = false;
+    let jarvisLatestReply = '';
+    let jarvisPendingSpeechPurpose = 'intro';
+    let jarvisTurnstile = null;
+    let jarvisReconnectRequested = false;
+
+    function setJarvisStatus(text) {
+      jarvisStatus.textContent = text;
+      jarvisChatStatus.textContent = text;
+    }
+    function addJarvisMessage(role, text) {
+      const node = document.createElement('div');
+      node.className = 'jarvis-chat-msg ' + role;
+      node.textContent = String(text || '');
+      jarvisChatMessages.appendChild(node);
+      jarvisChatMessages.scrollTop = jarvisChatMessages.scrollHeight;
+      return node;
+    }
+    function openJarvisChat() {
+      jarvisChatPanel.hidden = false;
+      jarvisReopen.hidden = true;
+      if (!jarvisChatMessages.childElementCount) {
+        addJarvisMessage('system', 'Public portfolio mode. Ask about Gurpreet’s professional background, skills or JARVIS project.');
+        if (jarvisLatestReply) addJarvisMessage('assistant', jarvisLatestReply);
+      }
+      if (!jarvisConnected && jarvisTurnstile && typeof jarvisTurnstile.reset === 'function') {
+        jarvisReconnectRequested = true;
+        try { jarvisTurnstile.reset(jarvisTurnstileWidgetId); } catch (_) {}
+      }
+      jarvisChatInput.focus();
+    }
+    function closeJarvisChat() {
+      jarvisChatPanel.hidden = true;
+      jarvisReopen.hidden = false;
+    }
+    function closeJarvis() {
+      jarvisOverlay.classList.add('is-dismissed');
+      jarvisOverlay.setAttribute('aria-hidden', 'true');
+      jarvisReopen.hidden = false;
+      const heroHeading = document.querySelector('.hero h1');
+      if (heroHeading) { heroHeading.setAttribute('tabindex', '-1'); heroHeading.focus({preventScroll:true}); }
+    }
+    function openJarvis() {
+      jarvisOverlay.classList.remove('is-dismissed');
+      jarvisOverlay.setAttribute('aria-hidden', 'false');
+      jarvisChatPanel.hidden = true;
+      jarvisReopen.hidden = true;
+      jarvisEnter.focus({preventScroll:true});
+    }
+    function endpointConfigured() {
+      return JARVIS_WS_URL.startsWith('wss://') && !JARVIS_WS_URL.includes('REPLACE_WITH');
+    }
+    function turnstileConfigured() {
+      return JARVIS_TURNSTILE_SITE_KEY && !JARVIS_TURNSTILE_SITE_KEY.includes('REPLACE_WITH');
+    }
+    function connectJarvis(token) {
+      if (!endpointConfigured()) {
+        setJarvisStatus('Backend URL not configured');
+        jarvisIntro.textContent = 'The JARVIS backend URL has not been configured yet. The portfolio remains available while the live assistant is set up.';
+        return;
+      }
+      if (!turnstileConfigured() || !token) {
+        setJarvisStatus('Security verification not configured');
+        jarvisCountdown.textContent = 'Configure Turnstile site key to enable the live assistant.';
+        return;
+      }
+      if (jarvisSocket && (jarvisSocket.readyState === WebSocket.OPEN || jarvisSocket.readyState === WebSocket.CONNECTING)) return;
+      jarvisTurnstileToken = token;
+      setJarvisStatus('Connecting to JARVIS…');
+      try { jarvisSocket = new WebSocket(JARVIS_WS_URL); }
+      catch (_) { setJarvisStatus('Could not start the secure connection'); return; }
+      jarvisSocket.onopen = () => {
+        if (!jarvisTurnstileToken) { jarvisSocket.close(); return; }
+        jarvisSocket.send(JSON.stringify({type:'auth', token:jarvisTurnstileToken}));
+        jarvisTurnstileToken = null;
+      };
+      jarvisSocket.onmessage = event => {
+        let message;
+        try { message = JSON.parse(event.data); } catch (_) { return; }
+        if (message.type === 'ready') {
+          jarvisConnected = true;
+          setJarvisStatus('Secure connection · JARVIS online');
+          jarvisChatInput.disabled = false;
+          jarvisChatSend.disabled = false;
+          jarvisCountdown.textContent = 'JARVIS is ready to speak with you.';
+          if (!jarvisIntroReceived) {
+            jarvisIntroReceived = true;
+            jarvisSocket.send(JSON.stringify({type:'intro'}));
+          }
+          return;
+        }
+        if (message.type === 'response') {
+          const answer = String(message.text || '').trim();
+          if (!answer) return;
+          jarvisLatestReply = answer;
+          if (message.purpose === 'intro') {
+            jarvisIntro.textContent = answer;
+            setJarvisStatus('JARVIS introduction ready');
+            jarvisCountdown.textContent = 'Ask JARVIS a question or explore the portfolio.';
+          } else {
+            addJarvisMessage('assistant', answer);
+            setJarvisStatus('JARVIS ready');
+          }
+          return;
+        }
+        if (message.type === 'audio') {
+          try {
+            const binary = atob(String(message.data || ''));
+            const bytes = new Uint8Array(binary.length);
+            for (let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+            const blob = new Blob([bytes], {type: message.mime || 'audio/wav'});
+            const url = URL.createObjectURL(blob);
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.preload = 'none';
+            audio.src = url;
+            const target = jarvisPendingSpeechPurpose === 'intro' ? jarvisIntroAudioWrap : jarvisChatAudioWrap;
+            target.replaceChildren(audio);
+            target.hidden = false;
+            setJarvisStatus('JARVIS voice response ready — press play');
+          } catch (_) { setJarvisStatus('Could not prepare the audio response'); }
+          return;
+        }
+        if (message.type === 'error') {
+          const errorText = String(message.message || 'Request could not be completed.');
+          setJarvisStatus(errorText);
+          if (!jarvisChatPanel.hidden) addJarvisMessage('system', errorText);
+        }
+      };
+      jarvisSocket.onerror = () => setJarvisStatus('JARVIS connection error');
+      jarvisSocket.onclose = () => {
+        jarvisConnected = false;
+        jarvisChatInput.disabled = true;
+        jarvisChatSend.disabled = true;
+        setJarvisStatus('JARVIS offline · open chat and retry security verification');
+      };
+    }
+    function sendJarvis(message) {
+      if (!jarvisSocket || jarvisSocket.readyState !== WebSocket.OPEN || !jarvisConnected) {
+        addJarvisMessage('system', 'JARVIS is not connected. Complete the security verification and retry.');
+        return false;
+      }
+      jarvisSocket.send(JSON.stringify(message));
+      return true;
+    }
+    function askForVoice(purpose) {
+      if (!jarvisLatestReply) { setJarvisStatus('Waiting for JARVIS response'); return; }
+      jarvisPendingSpeechPurpose = purpose;
+      if (!sendJarvis({type:'speak'})) return;
+      setJarvisStatus('Generating JARVIS voice audio…');
+    }
+
+    jarvisEnter.addEventListener('click', closeJarvis);
+    jarvisVoice.addEventListener('click', () => askForVoice('intro'));
+    jarvisChatStart.addEventListener('click', () => { closeJarvis(); openJarvisChat(); });
+    jarvisReopen.addEventListener('click', openJarvisChat);
+    jarvisChatClose.addEventListener('click', closeJarvisChat);
+    document.getElementById('jarvisChatSpeak').addEventListener('click', () => askForVoice('chat'));
+    jarvisOverlay.addEventListener('click', event => { if (event.target === jarvisOverlay) closeJarvis(); });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !jarvisChatPanel.hidden) closeJarvisChat();
+      else if (event.key === 'Escape' && !jarvisOverlay.classList.contains('is-dismissed')) closeJarvis();
+    });
+    jarvisChatForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const text = jarvisChatInput.value.trim();
+      if (!text) return;
+      if (text.length > 1000) { addJarvisMessage('system', 'Keep your question under 1,000 characters.'); return; }
+      if (sendJarvis({type:'chat', text})) {
+        addJarvisMessage('visitor', text);
+        jarvisChatInput.value = '';
+        setJarvisStatus('JARVIS is thinking…');
+      }
+    });
+
+    // The site key is public. The matching secret belongs only in the local JARVIS .env.
+    window.onJarvisTurnstileLoaded = function () {
+      if (!turnstileConfigured()) {
+        setJarvisStatus('Turnstile site key not configured');
+        jarvisIntro.textContent = 'The live JARVIS assistant is being connected. The portfolio is available, but live chat requires a configured security widget and backend URL.';
+        return;
+      }
+      try {
+        jarvisTurnstile = window.turnstile;
+        jarvisTurnstileWidgetId = jarvisTurnstile.render('#jarvisTurnstile', {
+          sitekey: JARVIS_TURNSTILE_SITE_KEY,
+          theme: 'dark',
+          size: 'normal',
+          appearance: 'interaction-only',
+          action: 'portfolio_chat',
+          callback: token => connectJarvis(token),
+          'expired-callback': () => { jarvisTurnstileToken = null; setJarvisStatus('Security token expired; retry verification'); },
+          'error-callback': () => setJarvisStatus('Security verification failed')
+        });
+      } catch (_) { setJarvisStatus('Security widget could not load'); }
+    };
+
+    // Always show the welcome overlay on a fresh page load; live JARVIS intros this visit.
   </script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onJarvisTurnstileLoaded&render=explicit" async defer></script>
 </body>
 </html>
