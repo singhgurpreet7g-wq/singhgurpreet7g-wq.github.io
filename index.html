@@ -47,7 +47,7 @@
     .jarvis-chat-msg.assistant{align-self:flex-start;background:rgba(73,200,255,.065);color:#e7f6ff}.jarvis-chat-msg.visitor{align-self:flex-end;background:rgba(140,228,189,.065);border-color:rgba(140,228,189,.2);color:#e9fff4}.jarvis-chat-msg.system{align-self:center;background:transparent;color:var(--muted);border-style:dashed;font-size:10px;text-align:center}
     .jarvis-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.jarvis-chat-form input{min-width:0;flex:1;border:1px solid rgba(157,177,200,.25);border-radius:12px;background:#061321;color:var(--text);padding:11px 12px;font:inherit;font-size:12px;outline:none}.jarvis-chat-form input:focus{border-color:var(--blue)}
     .jarvis-chat-form button{border:1px solid transparent;border-radius:12px;padding:0 15px;background:linear-gradient(100deg,#37b8ee,#6de2e7);color:#061320;font:inherit;font-size:12px;font-weight:800;cursor:pointer}.jarvis-chat-form button:disabled,.jarvis-chat-form input:disabled{opacity:.45;cursor:not-allowed}
-    .jarvis-chat-note{padding:0 14px 13px;color:#7f96ad;font-size:9px;line-height:1.5}.jarvis-chat-audio{padding:0 14px 12px}.jarvis-chat-audio audio,.jarvis-audio-wrap audio{width:100%;height:38px}.jarvis-audio-wrap{margin-top:12px;max-width:440px}.jarvis-turnstile{position:relative;z-index:5;width:min(100%,300px);min-height:0;margin:14px 0 2px;overflow:visible;opacity:1;pointer-events:auto}
+    .jarvis-chat-note{padding:0 14px 13px;color:#7f96ad;font-size:9px;line-height:1.5}.jarvis-chat-audio{padding:0 14px 12px}.jarvis-chat-audio audio,.jarvis-audio-wrap audio{width:100%;height:38px}.jarvis-audio-wrap{margin-top:12px;max-width:440px}.jarvis-chat-verification{padding:10px 12px 5px;border-bottom:1px solid var(--line);background:rgba(73,200,255,.025)}.jarvis-chat-verification p{margin:0 0 7px;color:var(--muted);font-size:10px;line-height:1.4}.jarvis-turnstile{position:relative;z-index:5;width:min(100%,300px);min-height:65px;margin:0 0 4px;overflow:visible;opacity:1;pointer-events:auto}
     @media(max-width:760px){.jarvis-chat-panel{right:12px;bottom:70px;width:calc(100vw - 24px);max-height:calc(100dvh - 90px)}.jarvis-chat-messages{max-height:38vh}.jarvis-chat-form input{font-size:16px}.jarvis-reopen{max-width:calc(100vw - 24px)}}
 
   </style>
@@ -74,7 +74,6 @@
           <p class="jarvis-detail">Establishing a secure link to Gurpreet's J.A.R.V.I.S. assistant. Once connected, JARVIS will introduce Gurpreet and answer questions about his public professional profile and projects.</p>
           <p class="jarvis-signoff">Live portfolio assistant · security verification required.</p>
           <div id="jarvisIntroAudioWrap" class="jarvis-audio-wrap" hidden></div>
-          <div id="jarvisTurnstile" class="jarvis-turnstile" aria-label="Security verification"></div>
           <div class="jarvis-actions">
             <button class="button primary" id="jarvisEnter" type="button">Explore portfolio <span aria-hidden="true">↗</span></button>
             <button class="button ghost" id="jarvisVoice" type="button">Hear JARVIS voice</button>
@@ -93,6 +92,10 @@
       <div><strong>J.A.R.V.I.S.</strong><small id="jarvisChatStatus">Waiting for secure verification</small></div>
       <button type="button" class="jarvis-chat-close" id="jarvisChatClose" aria-label="Close chat">×</button>
     </header>
+    <div class="jarvis-chat-verification">
+      <p>Complete security verification to connect to J.A.R.V.I.S.</p>
+      <div id="jarvisTurnstile" class="jarvis-turnstile" aria-label="Security verification"></div>
+    </div>
     <div class="jarvis-chat-messages" id="jarvisChatMessages" role="log" aria-live="polite" aria-relevant="additions"></div>
     <div class="jarvis-chat-audio" id="jarvisChatAudioWrap" hidden></div>
     <div style="padding:0 12px 8px"><button type="button" class="button ghost" id="jarvisChatSpeak" style="padding:7px 11px;font-size:10px">Hear JARVIS voice</button></div>
@@ -252,15 +255,21 @@
       return node;
     }
     function openJarvisChat() {
+      // Turnstile must be rendered in the visible chat panel. Rendering it in
+      // the welcome overlay caused the widget to be hidden when the overlay closed.
       jarvisChatPanel.hidden = false;
       jarvisReopen.hidden = true;
       if (!jarvisChatMessages.childElementCount) {
         addJarvisMessage('system', 'Public portfolio mode. Ask about Gurpreet’s professional background, skills or JARVIS project.');
         if (jarvisLatestReply) addJarvisMessage('assistant', jarvisLatestReply);
       }
-      if (!jarvisConnected && jarvisTurnstile && typeof jarvisTurnstile.reset === 'function') {
-        jarvisReconnectRequested = true;
-        try { jarvisTurnstile.reset(jarvisTurnstileWidgetId); } catch (_) {}
+      jarvisReconnectRequested = !jarvisConnected;
+      if (!jarvisConnected) {
+        if (jarvisTurnstile && jarvisTurnstileWidgetId !== null && typeof jarvisTurnstile.reset === 'function') {
+          try { jarvisTurnstile.reset(jarvisTurnstileWidgetId); } catch (_) {}
+        } else {
+          ensureJarvisTurnstile();
+        }
       }
       jarvisChatInput.focus();
     }
@@ -362,12 +371,17 @@
           if (!jarvisChatPanel.hidden) addJarvisMessage('system', errorText);
         }
       };
-      jarvisSocket.onerror = () => setJarvisStatus('JARVIS connection error');
-      jarvisSocket.onclose = () => {
+      jarvisSocket.onerror = () => setJarvisStatus('JARVIS connection failed · check the secure tunnel');
+      jarvisSocket.onclose = event => {
         jarvisConnected = false;
         jarvisChatInput.disabled = true;
         jarvisChatSend.disabled = true;
-        setJarvisStatus('JARVIS offline · open chat and retry security verification');
+        // Avoid replacing a more precise verification message with a generic offline state.
+        if (event && event.code === 1008) {
+          setJarvisStatus('Security verification rejected · retry the widget');
+        } else {
+          setJarvisStatus('JARVIS offline · verify security and retry');
+        }
       };
     }
     function sendJarvis(message) {
@@ -409,25 +423,53 @@
     });
 
     // The site key is public. The matching secret belongs only in the local JARVIS .env.
+    // Render Turnstile only after the chat panel is visible so the challenge can be
+    // seen and completed by the visitor (never inside the dismissible welcome overlay).
+    function ensureJarvisTurnstile() {
+      if (!turnstileConfigured()) {
+        setJarvisStatus('Turnstile site key not configured');
+        return;
+      }
+      if (jarvisChatPanel.hidden || jarvisTurnstileWidgetId !== null) return;
+      if (!jarvisTurnstile || typeof jarvisTurnstile.render !== 'function') {
+        setJarvisStatus('Loading security verification…');
+        return;
+      }
+      try {
+        jarvisTurnstileWidgetId = jarvisTurnstile.render('#jarvisTurnstile', {
+          sitekey: JARVIS_TURNSTILE_SITE_KEY,
+          theme: 'dark',
+          size: 'normal',
+          appearance: 'always',
+          action: 'portfolio_chat',
+          callback: token => connectJarvis(token),
+          'expired-callback': () => {
+            jarvisTurnstileToken = null;
+            setJarvisStatus('Security token expired; retry verification');
+          },
+          'error-callback': () => {
+            jarvisTurnstileToken = null;
+            setJarvisStatus('Security verification failed · retry the widget');
+          },
+          'timeout-callback': () => {
+            jarvisTurnstileToken = null;
+            setJarvisStatus('Security verification timed out · retry');
+          }
+        });
+      } catch (_) {
+        jarvisTurnstileWidgetId = null;
+        setJarvisStatus('Security widget could not load');
+      }
+    }
+
     window.onJarvisTurnstileLoaded = function () {
       if (!turnstileConfigured()) {
         setJarvisStatus('Turnstile site key not configured');
         jarvisIntro.textContent = 'The live JARVIS assistant is being connected. The portfolio is available, but live chat requires a configured security widget and backend URL.';
         return;
       }
-      try {
-        jarvisTurnstile = window.turnstile;
-        jarvisTurnstileWidgetId = jarvisTurnstile.render('#jarvisTurnstile', {
-          sitekey: JARVIS_TURNSTILE_SITE_KEY,
-          theme: 'dark',
-          size: 'normal',
-          appearance: 'interaction-only',
-          action: 'portfolio_chat',
-          callback: token => connectJarvis(token),
-          'expired-callback': () => { jarvisTurnstileToken = null; setJarvisStatus('Security token expired; retry verification'); },
-          'error-callback': () => setJarvisStatus('Security verification failed')
-        });
-      } catch (_) { setJarvisStatus('Security widget could not load'); }
+      jarvisTurnstile = window.turnstile;
+      if (!jarvisChatPanel.hidden) ensureJarvisTurnstile();
     };
 
     // Always show the welcome overlay on a fresh page load; live JARVIS intros this visit.
